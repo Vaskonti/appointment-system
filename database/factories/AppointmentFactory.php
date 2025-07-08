@@ -10,17 +10,33 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class AppointmentFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
+    protected $model = Appointment::class;
+
     public function definition(): array
     {
         return [
-            'client_id' => \App\Models\Client::factory(),
+            'client_id' => null, // will be overridden
             'title' => $this->faker->sentence,
-            'date' => $this->faker->dateTimeBetween('now', '+1 year'),
+            'date_time' => now(), // will be overridden
+            'reminder_offset_minutes' => $this->faker->boolean ? $this->faker->numberBetween(5, 120) : null,
         ];
+    }
+
+    public function withRandomDateForTimezone(string $timezone): self
+    {
+        return $this->state(function () use ($timezone) {
+            $isFuture = $this->faker->boolean;
+            $days = $this->faker->numberBetween(1, 30);
+            $hour = $this->faker->numberBetween(9, 16);
+            $minute = $this->faker->numberBetween(0, 59);
+
+            $local = $isFuture
+                ? now($timezone)->addDays($days)
+                : now($timezone)->subDays($days);
+
+            return [
+                'date_time' => $local->setTime($hour, $minute)->timezone('UTC')->toDateTimeString(),
+            ];
+        });
     }
 }

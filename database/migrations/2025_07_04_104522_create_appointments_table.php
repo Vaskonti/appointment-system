@@ -14,8 +14,9 @@ return new class extends Migration
         Schema::create('appointments', function (Blueprint $table) {
             $table->id();
             $table->foreignId('client_id')->constrained('clients')->onDelete('cascade');
+            $table->unsignedInteger('reminder_offset_minutes')->nullable();
             $table->string('title');
-            $table->date('date');
+            $table->dateTime('date_time');
             $table->timestamps();
         });
     }

@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class ClientFactory extends Factory
 {
+    protected $model = Client::class;
     /**
      * Define the model's default state.
      *
@@ -22,6 +23,7 @@ class ClientFactory extends Factory
             'timezone' => $this->faker->timezone,
             'email' => $this->faker->unique()->safeEmail,
             'phone' => $this->faker->phoneNumber,
+            'reminder_offset_minutes' => $this->faker->numberBetween(5, 120),
         ];
     }
 }
