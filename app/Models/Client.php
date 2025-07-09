@@ -12,6 +12,11 @@ class Client extends Model
 {
     use HasFactory, Notifiable;
     protected $table = 'clients';
+    protected $guarded = ['id'];
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+    ];
 
     protected $fillable = [
         'name',

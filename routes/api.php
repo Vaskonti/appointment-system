@@ -11,7 +11,7 @@ Route::middleware([EnsureHeaders::class])->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
 });
 
-Route::middleware('auth-api')->group(function () {
+Route::middleware(['auth:api'])->group(function () {
     Route::get('/appointments', [AppointmentController::class, 'index']);
     Route::post('/appointments', [AppointmentController::class, 'store']);
 });

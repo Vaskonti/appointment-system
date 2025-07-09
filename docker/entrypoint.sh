@@ -10,8 +10,12 @@ fi
 
 chmod -R 777 /var/www/bootstrap/cache
 chmod -R 777 /var/www/storage
-chmod 600 /var/www/storage/oauth-private.key
+chown www-data:www-data /var/www/storage/oauth-*.key
+chmod 660 /var/www/storage/oauth-private.key
 
-php artisan config:clear
+php artisan config:cleare
 php artisan migrate --force --seed
+php artisan migrate --force --env=testing
+php artisan passport:keys --force
+php artisan passport:client --personal --no-interaction
 exec docker-php-entrypoint php-fpm

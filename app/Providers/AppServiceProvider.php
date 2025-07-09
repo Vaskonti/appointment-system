@@ -6,6 +6,7 @@ use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
+use Laravel\Passport\Passport;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -22,6 +23,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        Passport::enablePasswordGrant();
         RateLimiter::for('api', function (Request $request) {
             return Limit::perMinute(60)->by($request->ip());
         });
@@ -32,8 +34,18 @@ class AppServiceProvider extends ServiceProvider
         );
 
         $this->app->bind(
-            \App\Repositories\UserRepositoryInterface::class,
-            \App\Repositories\UserRepository::class
+            \App\Repositories\User\UserRepositoryInterface::class,
+            \App\Repositories\User\UserRepository::class
+        );
+
+        $this->app->bind(
+            \App\Services\Appointment\AppointmentServiceInterface::class,
+            \App\Services\Appointment\AppointmentService::class
+        );
+
+        $this->app->bind(
+            \App\Repositories\Appointment\AppointmentRepositoryInterface::class,
+            \App\Repositories\Appointment\AppointmentRepository::class
         );
     }
 }
