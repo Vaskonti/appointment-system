@@ -35,7 +35,7 @@ class AppointmentNotification extends Notification
         return (new MailMessage)
             ->subject('Upcoming Appointment Reminder')
             ->line('You have an upcoming appointment: ' . $this->appointment->title)
-            ->line('Date and Time: ' . $this->appointment->date_time->format('Y-m-d H:i'))
+            ->line('Date and Time: ' . $this->appointment->date_time)
             ->line('Please make sure to attend.');
     }
 

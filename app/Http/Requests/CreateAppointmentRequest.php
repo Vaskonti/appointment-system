@@ -23,7 +23,7 @@ class CreateAppointmentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string', 'max:255'],
+            'title' => ['required', 'string', 'max:255'],
             'client_id' => ['required', 'exists:clients,id'],
             'date_time' => ['required', 'date', 'after_or_equal:now'],
         ];

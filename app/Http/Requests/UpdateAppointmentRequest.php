@@ -2,7 +2,10 @@
 
 namespace App\Http\Requests;
 
+use App\Constants\AppointmentStatus;
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateAppointmentRequest extends FormRequest
 {
@@ -11,18 +14,21 @@ class UpdateAppointmentRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array<string, ValidationRule|array|string>
      */
     public function rules(): array
     {
         return [
-            //
+            'title' => ['sometimes', 'string', 'max:255'],
+            'date_time' => ['sometimes', 'date_format:Y-m-d H:i:s'],
+            'status' => ['sometimes', Rule::in(AppointmentStatus::asArray())],
+            'reminder_offset_minutes' => ['sometimes', 'integer', 'min:0'],
         ];
     }
 }

@@ -29,7 +29,7 @@ interface AppointmentServiceInterface
      * @param array $data
      * @return Appointment
      */
-    public function update(int $id, array $data);
+    public function update(int $id, array $data): Appointment;
 
     /**
      * Delete an appointment by its ID.
@@ -45,4 +45,7 @@ interface AppointmentServiceInterface
      * @return array
      */
     public function getAll(): array;
+
+    public function getPastAppointmentsByUserId(int $userId, int $clientId): array;
+    public function getUpcomingAppointmentsByUserId(int $userId, int $clientId): array;
 }

@@ -13,4 +13,6 @@ interface AppointmentRepositoryInterface
     public function getAll(): array;
 
     public function getAppointmentsByUserId(int $userId): array;
+    public function getPastAppointmentsByUserId(int $userId, int $clientId): array;
+    public function getUpcomingAppointmentsByUserId(int $userId, int $clientId): array;
 }

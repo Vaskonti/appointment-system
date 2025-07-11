@@ -1,59 +1,104 @@
 <?php
 
-it('can create an appointment', function () {
-    $user = \App\Models\User::factory()->create();
-    $this->actingAs($user, 'api');
+use App\Constants\AppointmentStatus;
+use App\Models\Appointment;
+use App\Models\Client;
+use App\Models\User;
+use Illuminate\Support\Facades\Queue;
 
+beforeEach(function () {
+    $user = User::factory()->create();
+    $this->user = $user;
+    $this->actingAs($this->user, 'api');
+    $this->client = Client::factory()->create(['user_id' => $user->id]);
+});
+
+it('can create an appointment', function () {
     $response = $this->postJson('/api/appointments', [
-        'date' => '2023-10-01',
-        'time' => '10:00:00',
-        'status' => \App\Constants\AppointmentStatus::SCHEDULED,
+        'title' => 'Test Appointment',
+        'date_time' => '2025-10-01 10:00:00',
+        'client_id' => $this->client->id,
+        'status' => AppointmentStatus::SCHEDULED,
     ]);
 
     $response->assertStatus(201)
-             ->assertJsonStructure(['id', 'date', 'time', 'status']);
+        ->assertJsonStructure([
+            'appointment' => [
+                'client_id',
+                'title',
+                'date_time',
+            ]]);
+});
+
+it('can schedule a new job', function () {
+    Queue::fake();
+    $response = $this->postJson('/api/appointments', [
+        'title' => 'Test Appointment',
+        'date_time' => '2025-10-01 10:00:00',
+        'client_id' => $this->client->id,
+        'status' => AppointmentStatus::SCHEDULED,
+    ]);
+
+    $response->assertStatus(201)
+        ->assertJsonStructure([
+            'appointment' => [
+                'client_id',
+                'title',
+                'date_time',
+            ],
+        ]);
+    Queue::assertPushed(
+        \App\Jobs\ReminderDispatch::class,
+    );
+
 });
 
 it('can retrieve an appointment by ID', function () {
-    $user = \App\Models\User::factory()->create();
-    $this->actingAs($user, 'api');
-
-    $appointment = \App\Models\Appointment::factory()->create();
+    $appointment = Appointment::factory()->create(['client_id' => $this->client->id, 'status' => AppointmentStatus::SCHEDULED]);
 
     $response = $this->getJson("/api/appointments/{$appointment->id}");
 
     $response->assertStatus(200)
-             ->assertJsonStructure(['id', 'date', 'time', 'status'])
-             ->assertJson(['id' => $appointment->id]);
+        ->assertJsonStructure([
+            'appointment' => [
+                'id',
+                'client_id',
+                'title',
+                'date_time',
+                'status',
+            ],
+            'client' => [
+                'name',
+                'timezone',
+                'email',
+                'phone',
+                'reminder_offset_minutes',
+                'reminder_method',
+            ],
+        ]);
 });
 
 it('can update an appointment', function () {
-    $user = \App\Models\User::factory()->create();
-    $this->actingAs($user, 'api');
-    $appointment = \App\Models\Appointment::factory()->create();
-    $newDate = '2023-10-02';
-
-    $newTime = '11:00:00';
-    $newStatus = \App\Constants\AppointmentStatus::COMPLETED;
+    $appointment = Appointment::factory()->create(['client_id' => $this->client->id, 'status' => AppointmentStatus::SCHEDULED]);
     $response = $this->putJson("/api/appointments/{$appointment->id}", [
-        'date' => $newDate,
-        'time' => $newTime,
-        'status' => $newStatus,
+        'title' => 'Updated Appointment',
+        'date_time' => '2025-10-01 11:00:00',
+        'status' => AppointmentStatus::COMPLETED,
     ]);
+
     $response->assertStatus(200)
-             ->assertJsonStructure(['id', 'date', 'time', 'status'])
-             ->assertJson([
-                 'id' => $appointment->id,
-                 'date' => $newDate,
-                 'time' => $newTime,
-                 'status' => $newStatus,
-             ]);
+        ->assertJsonStructure([
+            'appointment' => [
+                'client_id',
+                'title',
+                'date_time',
+                'status',
+            ],
+        ]);
 });
 
 it('can delete an appointment', function () {
-    $user = \App\Models\User::factory()->create();
-    $this->actingAs($user, 'api');
-    $appointment = \App\Models\Appointment::factory()->create();
+    $appointment = Appointment::factory()->create(['client_id' => $this->client->id]);
     $response = $this->deleteJson("/api/appointments/{$appointment->id}");
     $response->assertStatus(204);
 
@@ -61,14 +106,68 @@ it('can delete an appointment', function () {
 });
 
 it('can list all appointments for the authenticated user', function () {
-    $user = \App\Models\User::factory()->create();
-    $this->actingAs($user, 'api');
-
-    $appointments = \App\Models\Appointment::factory()->count(3)->create(['user_id' => $user->id]);
+    Appointment::factory()->count(3)->create(['client_id' => $this->client->id, 'status' => AppointmentStatus::SCHEDULED]);
 
     $response = $this->getJson('/api/appointments');
 
     $response->assertStatus(200)
-             ->assertJsonCount(3, 'data')
-             ->assertJsonStructure(['data' => [['id', 'date', 'time', 'status']]]);
+        ->assertJsonCount(1, 'clients')
+        ->assertJsonStructure(['clients' => [
+            [
+                'name',
+                'timezone',
+                'email',
+                'phone',
+                'reminder_offset_minutes',
+                'reminder_method',
+                'appointments' => [
+                    '*' => [
+                        'id',
+                        'title',
+                        'date_time',
+                        'status',
+                    ],
+                ],
+            ],
+        ]]);
+});
+
+it('can get past appointments', function () {
+    Appointment::factory()->create([
+        'client_id' => $this->client->id,
+        'date_time' => now()->subDays(10),
+        'status' => AppointmentStatus::COMPLETED,
+    ]);
+
+    $response = $this->getJson('/api/past-appointments/' . $this->client->id);
+
+    $response->assertStatus(200)
+        ->assertJsonStructure(['appointments' => [
+            '*' => [
+                'id',
+                'title',
+                'date_time',
+                'status',
+            ],
+        ]]);
+});
+
+it('can get upcoming appointments', function () {
+    Appointment::factory()->create([
+        'client_id' => $this->client->id,
+        'date_time' => now()->addDays(10),
+        'status' => AppointmentStatus::SCHEDULED,
+    ]);
+
+    $response = $this->getJson('/api/upcoming-appointments/' . $this->client->id);
+
+    $response->assertStatus(200)
+        ->assertJsonStructure(['appointments' => [
+            '*' => [
+                'id',
+                'title',
+                'date_time',
+                'status',
+            ],
+        ]]);
 });

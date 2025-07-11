@@ -48,4 +48,26 @@ class AppointmentRepository implements AppointmentRepositoryInterface
             ->get()
             ->toArray();
     }
+
+    public function getPastAppointmentsByUserId(int $userId, int $clientId): array
+    {
+        return Appointment::where('client_id', $clientId)
+            ->where('date_time', '<', now())
+            ->whereHas('client', function ($query) use ($userId) {
+                $query->where('user_id', $userId);
+            })
+            ->get()
+            ->toArray();
+    }
+
+    public function getUpcomingAppointmentsByUserId(int $userId, int $clientId): array
+    {
+        return Appointment::where('client_id', $clientId)
+            ->where('date_time', '>=', now())
+            ->whereHas('client', function ($query) use ($userId) {
+                $query->where('user_id', $userId);
+            })
+            ->get()
+            ->toArray();
+    }
 }

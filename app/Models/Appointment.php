@@ -19,6 +19,7 @@ class Appointment extends Model
         'client_id',
         'title',
         'date_time',
+        'status',
         'reminder_offset_minutes',
     ];
 

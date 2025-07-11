@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\Appointment;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
@@ -24,6 +25,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Passport::enablePasswordGrant();
+        Appointment::observe(\App\Observers\AppointmentObserver::class);
         RateLimiter::for('api', function (Request $request) {
             return Limit::perMinute(60)->by($request->ip());
         });
@@ -46,6 +48,11 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(
             \App\Repositories\Appointment\AppointmentRepositoryInterface::class,
             \App\Repositories\Appointment\AppointmentRepository::class
+        );
+
+        $this->app->bind(
+            \App\Repositories\Client\ClientRepositoryInterface::class,
+            \App\Repositories\Client\ClientRepository::class
         );
     }
 }

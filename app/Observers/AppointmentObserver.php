@@ -2,9 +2,12 @@
 
 namespace App\Observers;
 
+use App\Jobs\ReminderDispatch;
 use App\Models\Appointment;
+use App\Models\Client;
 use App\Notifications\AppointmentNotification;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 
 class AppointmentObserver
 {
@@ -13,13 +16,16 @@ class AppointmentObserver
      */
     public function created(Appointment $appointment): void
     {
+        /** @var Client $client */
         $client = $appointment->client;
-        $appointmentTimeUTC = Carbon::parse($appointment->date_time)->timezone(\DateTimeZone::UTC);
+        $appointmentTimeUTC = Carbon::parse($appointment->date_time)->timezone('UTC');
 
         $reminderTimeUTC = $appointmentTimeUTC->subMinutes($client->reminder_offset_minutes);
 
         if ($reminderTimeUTC->isFuture()) {
-            $client->notify(new AppointmentNotification($appointment))->delay($reminderTimeUTC);
+           ReminderDispatch::dispatch($client, $appointment)->delay(
+                $reminderTimeUTC
+            );
         }
     }
 
