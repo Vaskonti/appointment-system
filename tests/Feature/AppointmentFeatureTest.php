@@ -1,6 +1,7 @@
 <?php
 
 use App\Constants\AppointmentStatus;
+use App\Jobs\ReminderDispatch;
 use App\Models\Appointment;
 use App\Models\Client;
 use App\Models\User;
@@ -48,7 +49,7 @@ it('can schedule a new job', function () {
             ],
         ]);
     Queue::assertPushed(
-        \App\Jobs\ReminderDispatch::class,
+        ReminderDispatch::class,
     );
 
 });
