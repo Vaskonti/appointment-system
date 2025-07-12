@@ -6,7 +6,7 @@ A RESTful API built with Laravel 12 that allows businesses to manage client appo
 
 ## 🧰 Tech Stack
 
-- Laravel 12
+- Laravel 12, PHP 8.2
 - Passport (Authentication)
 - Horizon + Redis (Queues)
 - Mailpit / Mailtrap (Email Testing)
@@ -26,7 +26,8 @@ A RESTful API built with Laravel 12 that allows businesses to manage client appo
 - **Testing** is done using Pest, with a focus on API endpoints and business logic as well as unit tests for appointments
 
 ## 🌟 Api Documentation
-- [Postman Collection](https://www.getpostman.com/collections/1f0b3c8d5e6a4f2b8c9d)
+- [Postman Collection](/doc/appointment_system.postman_collection.json)
+Please import the Postman collection to test the API endpoints.
 
 ## GitHub Actions
 - CI/CD pipeline for running Snyk for security vulnerabilities, PHP CodeSniffer fixer, and Pest tests on every push and pull request.

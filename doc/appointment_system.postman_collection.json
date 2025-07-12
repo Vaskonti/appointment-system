@@ -1,0 +1,283 @@
+{
+	"info": {
+		"_postman_id": "21024777-8e74-46c6-909d-6a8153652530",
+		"name": "Appointment System",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "12623370"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"vasil.hristov22@abv.bg\",\n    \"name\": \"Vasil\",\n    \"password\": \"parolata123\",\n    \"password_confirmation\": \"parolata123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8000/api/register",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"vasil.hri11as1@abv.bg\",\n    \"password\": \"parolata123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8000/api/login",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Appointments [SECURED]",
+			"item": [
+				{
+					"name": "Get Appointment",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIwMTk3ZjNjZC1jMDc0LTcyMTYtYThmMy1mYmMwZDY4YzkxYWMiLCJqdGkiOiIzMzgzOTU3NWM3ZjE0ZjRkZTJmYzhkYzQ3ZGEzZGM3NTZmYmNmMGZjZmE3YmQzYTUyNmJlYmViNGNjMGUwNTJlZDFiOTdhNDdiODAwMDEwZCIsImlhdCI6MTc1MjE0MjQwNi43ODAzNTQsIm5iZiI6MTc1MjE0MjQwNi43ODAzNTgsImV4cCI6MTc4MzY3ODQwNi43NDM1NDIsInN1YiI6IjIiLCJzY29wZXMiOltdfQ.ldA9ibE_HH-WlmaXuHdLY1_ANlgS7jcmTrqlTEobHd3hJ8p25AamC4Pz9htRYppN9rs8Wodrt5hqn-BPyJIByWSOJ2HROvgWkjqRr2rnCmte_JWOwqHzFH1cNBd6T2oM8BvwdTrTaxRZxJacbLSAFxTDEbxTWmXCv0RPXxJzdtO8dPhmRL9-a3Kqv1rJ6w3vXA46GOjr2SkeJQWZHNir9VUIMKc2WpGQBIhxavwwqzskfw4JDOoJ_ivuiIbd8tlcUZ1M-GfmgAui-CH6NneSA4-5HA4lJyfS997zETKTmflsqSSBG9UIDKccSBeTgz25-LdHp8jQRw46xdr-wlbzg2c6fgpdzXrYniB0d90Rym_lgoYMnGoIaqCVKu34MiEoyMsIztbpBWsVAPMkzl0g-nln__oaLvtsrbpNO_rtO3vHzMZuWxTJ2tphr7RwyeA53eaSZ6XqYiPcMgHMzaSfWeDdoKY5Lb1mUO-G3mV5UVfbaWx0yXMJ0JQYJoLxkCXK-3S5DS6abevrYbtI0atZxFVUTYn_F5o7liXhSpJN8-_mQWUA1B-wWJcDPGsfwQLMO4XvHW4ExQdSHW9Z-e6fhTnewTmqY05M1z9Wtn4JosdbishBHiZ0C7cxwnmM1ZrnNBwM7q4D4L1QdKBICKSzpbrb9_KCo4cWpAAIyeQX71E",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8000/api/appointments",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"appointments"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Appointment",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIwMTk3ZjQ3Zi1lNjczLTczYWItYWQ5NS0yNGQxZTY4MGIwYTMiLCJqdGkiOiIxNTNjNjM3YWJhOTEzODBjN2YwZTVmZjQwOWVmZWJjODJjMWFlMTUxN2QzYzc2MWJhNDU3MWRhMTM3NDJlZmNkZGYyNWJiMWZmMzVlMWIyMiIsImlhdCI6MTc1MjE1MzgwMS42ODU3OTksIm5iZiI6MTc1MjE1MzgwMS42ODU4MDEsImV4cCI6MTc4MzY4OTgwMS42NDU4MSwic3ViIjoiMiIsInNjb3BlcyI6W119.ZhKhG5L_zVDeIpSRwXgMd5pVdVw0dwG4x6Ij7thjzO90mQUqezdDjJ4MzACEpgKhYtZXbL4vRmEszeWe7BTtiCM0MKXcZCimVQVxVB70qeNfLYUw4nimm_AzYUuPbKJAXUjMn2DsLYTD5DZutNk9YMct6juySAdZI5Oi9hKanm4NaAQvzU7-SSY_3uoxCbdLQzUIwBAhx-jbTnQbiO8Jtkz2wmgmNdbLS9Xd5HQM6oqUlVRrijhTPJ1jBLqxHPZOq-H0GfSGHF5Z-2slqKdqb7rvp_hF_dgfcJUSQceKLbFBJbIqArUSTYaHW74VluGDX1SvPXNCwd8E2zQWAB403lBmfMeA4ugMa2ldn9l3AXOmC2nP5pqkDpUkq5bxyPeNN4VjOEWrYxLcpBQUCqQFXU7x7OWQHQ7qtrSYbHsOsidvs1xCOS2eV-RPepUD-zX1iNOjPl1VM9RvnlYyrWaLMushE7UaXpFhJUSNpAcuW6o_NDqkfJ_OYdSWcosy4Shdrmy7qZa25uFiWXsM4TtwYvN8WKF_tZa_R7kxIMYvsVjfoWFbKYGpJMQOg3rzIgbri5j6dabXXgOtnSSi4pycvDnxtsZ3mMN9dZMmJbO_eyN4G3Cyisw_j8-CIzarP0MSDnwPlgqa4gqeiHvVAN5GDiSL35ybKVETOGSxZlRH8no",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"client_id\": 1,\n    \"title\": \"Sreshta\",\n    \"date_time\": \"2025-07-10 22:00:00\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8000/api/appointments",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"appointments"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Appointment",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "localhost:8000/api/appointments/22",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"appointments",
+								"22"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Appointment",
+					"request": {
+						"method": "DELETE",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "Get past appointments",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "Get upcoming appointments",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Clients [SECURED]",
+			"item": [
+				{
+					"name": "Get client",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "Create Client",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIwMTk4MDA0Mi05YzYzLTczYzMtOTA1MS1hMWE1YTdiMGNhYjYiLCJqdGkiOiIwNGZjZjRjMDQwNDZiMWUzYzQ2ZDE2Mjg0YTM2ZDhlOWM0ZGRmYzU0ZjllNWI2ZDZmNWUwZTVjY2E4ZWNhNTVkODgzYzNjZmZjNzQyYTAwMCIsImlhdCI6MTc1MjM1Mjc5MC4yNDkwMjYsIm5iZiI6MTc1MjM1Mjc5MC4yNDkwMjcsImV4cCI6MTc4Mzg4ODc5MC4yMzE0MDUsInN1YiI6IjIiLCJzY29wZXMiOltdfQ.ha77nKBjgCq9wXbsomGwRkHEjgyjpZQZG2HofNTyPT24vuhvEx2C8SCj6Sky_XA5fHSnuib4oUljSpHyLR2lJLwgyTw5hWZ2VpBZFYcxg-TUJBlrzKM4Lac04ZTNsYxVoxgWtJtzYuh9hkND4Ef-sGbDJSySbFtnq9NZ1VARdMfVmwOZpN9Dgqhan6lkZ9UmYmN2FWTPnDXMFQZ990vbOa8BEFbrVruu-ojWEQkCIHt5flspBg6RGAO6VPNZTG-7lNlaDbZ1OltU29OViMzRrK9CYmxV3sZ4dsYTL5u6tfM4UyWIl_EPmlDK-XTqKkyE9RSAflGqfaqWHwdN5NpsJP1b4QFsK4LCWR-7hhHawjAhoW90xerM41iz0QL5rMLlHhz0okTXUgOdLWc4_PrgJM6RxZP67nk1V_QIOUuWQi_FQXy9D4Sc1UNLTnHIdG3OwZY0uHWc5OZR8O8Cra1FHkeNgHlM-pfAlzVeVr7KFhZkBna9HVSQNKFAoUsv0Dzf8AW7eaNuSUDyW00aCOm-Y95D_gdN6kZB5ewI7tqsqGLWuLJQpiOa2MdUOyqHOYleW9C_c-I4Kd3aczSaNzdCHax_sC-AA_8cVuL7nd0NNBEoRhfERW43QNLt1iMrTSNDpzAClyFIrrT-mA6bv7TVvicl8YSg8nxJlmEjPai9Raw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Klient1\",\n    \"timezone\": \"Europe/Sofia\",\n    \"email\": \"vasil.hristov@abv.bg\"\n}"
+						},
+						"url": {
+							"raw": "localhost:8000/api/clients",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"clients"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Client",
+					"request": {
+						"method": "PUT",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Client",
+					"request": {
+						"method": "DELETE",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
