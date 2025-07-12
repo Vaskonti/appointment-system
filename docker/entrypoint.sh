@@ -18,4 +18,5 @@ php artisan migrate --force --seed
 php artisan migrate --force --env=testing
 php artisan passport:keys --force
 php artisan passport:client --personal --no-interaction
-exec docker-php-entrypoint php-fpm
+exec docker-php-entrypoint php-fpm php artisan horizon
+

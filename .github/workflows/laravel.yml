@@ -43,7 +43,7 @@ jobs:
           --no-scripts --no-progress --prefer-dist
 
   PhpCsFixer:
-#    needs: [CacheComposer, Snyk]
+    needs: [CacheComposer, Snyk]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
@@ -79,7 +79,7 @@ jobs:
           - 3306/tcp
         options: --health-cmd="mysqladmin ping" --health-interval=10s
           --health-timeout=5s --health-retries=3
-#    needs: [PhpCsFixer]
+    needs: [PhpCsFixer]
     runs-on: ubuntu-latest
     steps:
     - uses: shivammathur/setup-php@15c43e89cdef867065b0213be354c2841860869e
