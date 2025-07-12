@@ -17,7 +17,7 @@ jobs:
           npm install -g snyk
           snyk auth ${{ secrets.SNYK_API_TOKEN }}
           snyk test
-    
+
   CacheComposer:
     runs-on: ubuntu-latest
     steps:
@@ -41,9 +41,9 @@ jobs:
       - name: Install Composer dependencies
         run: composer install --no-ansi --no-interaction
           --no-scripts --no-progress --prefer-dist
-  
+
   PhpCsFixer:
-    needs: [CacheComposer, Snyk]
+#    needs: [CacheComposer, Snyk]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
@@ -67,15 +67,27 @@ jobs:
         run: |
           ./vendor/bin/php-cs-fixer fix --dry-run --diff ./app
   LaravelTests:
-    needs: [PhpCsFixer]
+    services:
+      mysql-service:
+        image: mysql:8
+        env:
+          MYSQL_DATABASE: appointment_system
+          MYSQL_USER: admin
+          MYSQL_ROOT_PASSWORD: password
+          MYSQL_PASSWORD: password
+        ports:
+          - 3306/tcp
+        options: --health-cmd="mysqladmin ping" --health-interval=10s
+          --health-timeout=5s --health-retries=3
+#    needs: [PhpCsFixer]
     runs-on: ubuntu-latest
     steps:
     - uses: shivammathur/setup-php@15c43e89cdef867065b0213be354c2841860869e
       with:
         php-version: '8.2'
     - uses: actions/checkout@v4
-    - name: Copy .env
-      run: php -r "file_exists('.env') || copy('.env.example', '.env');"
+    - name: Copy .env.ci to .env
+      run: php -r "file_exists('.env') || copy('.env.ci', '.env');"
     - name: Install Dependencies
       run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
     - name: Generate key
@@ -87,6 +99,6 @@ jobs:
         php artisan migrate --force --env=testing
     - name: Execute tests (Unit and Feature tests) via PHPUnit/Pest
       env:
-        DB_CONNECTION: mysql
+        DB_CONNECTION: mysql-service
         DB_DATABASE: appointment_system
       run: ./vendor/bin/pest
