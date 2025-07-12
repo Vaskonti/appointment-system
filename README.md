@@ -35,7 +35,7 @@ Please import the Postman collection to test the API endpoints.
 ## 🚀 Installation
 
 ```bash
-git clone https://github.com/Vaskonti/appointment-reminder.git
+git clone https://github.com/Vaskonti/appointment_system.git
 cd appointment-reminder-api
 cp .env.example .env
 
