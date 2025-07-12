@@ -64,8 +64,7 @@ class ReminderOffsetsObserver
     /**
      * Handle the ReminderOffsets "force deleted" event.
      */
-    public
-    function forceDeleted(ReminderOffsets $reminderOffsets): void
+    public function forceDeleted(ReminderOffsets $reminderOffsets): void
     {
         //
     }
