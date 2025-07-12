@@ -6,7 +6,6 @@ use App\Models\ReminderOffsets;
 
 class ReminderOffsetsService implements ReminderOffsetsServiceInterface
 {
-
     public function create(int $appointmentId, array $data): void
     {
         foreach ($data as $reminderData) {

@@ -37,8 +37,7 @@ class ReminderOffsetsObserver
     /**
      * Handle the ReminderOffsets "updated" event.
      */
-    public
-    function updated(ReminderOffsets $reminderOffsets): void
+    public function updated(ReminderOffsets $reminderOffsets): void
     {
         //
     }
@@ -46,8 +45,7 @@ class ReminderOffsetsObserver
     /**
      * Handle the ReminderOffsets "deleted" event.
      */
-    public
-    function deleted(ReminderOffsets $reminderOffsets): void
+    public function deleted(ReminderOffsets $reminderOffsets): void
     {
         //
     }
@@ -55,8 +53,7 @@ class ReminderOffsetsObserver
     /**
      * Handle the ReminderOffsets "restored" event.
      */
-    public
-    function restored(ReminderOffsets $reminderOffsets): void
+    public function restored(ReminderOffsets $reminderOffsets): void
     {
         //
     }
