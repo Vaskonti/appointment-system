@@ -73,7 +73,6 @@ it('can retrieve an appointment by ID', function () {
                 'timezone',
                 'email',
                 'phone',
-                'reminder_offset_minutes',
                 'reminder_method',
             ],
         ]);
@@ -119,7 +118,6 @@ it('can list all appointments for the authenticated user', function () {
                 'timezone',
                 'email',
                 'phone',
-                'reminder_offset_minutes',
                 'reminder_method',
                 'appointments' => [
                     '*' => [

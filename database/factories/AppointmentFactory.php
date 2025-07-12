@@ -19,7 +19,6 @@ class AppointmentFactory extends Factory
             'title' => 'asd', // Random title with 3 words
             'status' => $this->faker->randomElement(['scheduled', 'completed', 'cancelled']), // Random status
             'date_time' => now(), // will be overridden
-            'reminder_offset_minutes' => $this->faker->boolean ? $this->faker->numberBetween(5, 120) : null,
         ];
     }
 
