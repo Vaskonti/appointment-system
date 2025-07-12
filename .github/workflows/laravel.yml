@@ -87,7 +87,7 @@ jobs:
         php-version: '8.2'
     - uses: actions/checkout@v4
     - name: Copy .env.ci to .env
-      run: php -r "file_exists('.env') || copy('.env.ci', '.env');"
+      run: cp .env.ci .env
     - name: Install Dependencies
       run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
     - name: Generate key
@@ -96,7 +96,7 @@ jobs:
       run: chmod -R 777 storage bootstrap/cache
     - name: Create Database
       run: |
-        php artisan migrate --force --env=testing
+        php artisan migrate --force --env=ci
     - name: Execute tests (Unit and Feature tests) via PHPUnit/Pest
       env:
         DB_CONNECTION: mysql-service
