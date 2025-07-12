@@ -72,6 +72,7 @@ class AppointmentRepository implements AppointmentRepositoryInterface
     public function getPastAppointmentsByUserId(int $userId, int $clientId): array
     {
         return Appointment::where('client_id', $clientId)
+            ->with('reminderOffsets')
             ->where('date_time', '<', now())
             ->whereHas('client', function ($query) use ($userId) {
                 $query->where('user_id', $userId);
@@ -83,7 +84,7 @@ class AppointmentRepository implements AppointmentRepositoryInterface
     public function getUpcomingAppointmentsByUserId(int $userId, int $clientId): array
     {
         return Appointment::where('client_id', $clientId)
-            ->with('reminder_offsets')
+            ->with('reminderOffsets')
             ->where('date_time', '>=', now())
             ->whereHas('client', function ($query) use ($userId) {
                 $query->where('user_id', $userId);
