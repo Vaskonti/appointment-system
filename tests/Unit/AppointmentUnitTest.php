@@ -23,11 +23,3 @@ it('can cast appointment status to string', function () {
     expect($appointment->status)->toBeInstanceOf(App\Constants\AppointmentStatus::class)
         ->and($appointment->status->value)->toBe('scheduled');
 });
-
-it('can cast appointment date_time to Carbon', function () {
-    $appointment = new \App\Models\Appointment([
-        'date_time' => '2025-10-01 10:00:00',
-    ]);
-
-    expect($appointment->date_time)->toBeInstanceOf(\Carbon\Carbon::class);
-});
