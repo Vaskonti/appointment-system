@@ -19,11 +19,11 @@ class AuthController extends Controller
     public function register(RegisterRequest $request): JsonResponse
     {
         $user = $this->userService->registerUser(
-            name: $request->input('name'),
-            email: $request->input('email'),
-            password: $request->input('password')
+            name: $request->string('name'),
+            email: $request->string('email'),
+            password: $request->string('password')
         );
-        if (!isset($user)) {
+        if (!$user) {
             return response()->json(['message' => 'User registration failed'], 500);
         }
         return response()->json([
@@ -34,8 +34,9 @@ class AuthController extends Controller
 
     public function login(LoginRequest $request): JsonResponse
     {
+        // we aim to protect the system from exploiting email addresses
         if (!$this->userService->checkUserExists($request->input('email'))) {
-            return response()->json(['message' => 'User not found'], 404);
+            return response()->json(['message' => 'Invalid credentials'], 401);
         }
 
         $user = $this->userService->getUserByEmail($request->input('email'));
@@ -52,11 +53,11 @@ class AuthController extends Controller
     public function logout(Request $request): JsonResponse
     {
         $user = Auth::user();
-        if ($user) {
-            $token = $request->user()->token();
-            $token->revoke();
-            return response()->json(['message' => 'User logged out successfully']);
+        if (!$user) {
+            return response()->json(['message' => 'User not authenticated'], 401);
         }
-        return response()->json(['message' => 'User not authenticated'], 401);
+
+        $user->tokens()->delete();
+        return response()->json(['message' => 'Successfully logged out.']);
     }
 }

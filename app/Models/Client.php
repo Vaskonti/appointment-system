@@ -10,9 +10,9 @@ use Illuminate\Notifications\Notifiable;
 
 class Client extends Model
 {
-    use HasFactory, Notifiable;
+    use HasFactory;
+    use Notifiable;
     protected $table = 'clients';
-    protected $guarded = ['id'];
     protected $hidden = [
         'created_at',
         'updated_at',

@@ -18,12 +18,12 @@ class AppointmentObserver
     {
         /** @var Client $client */
         $client = $appointment->client;
-        $appointmentTimeUTC = Carbon::parse($appointment->date_time)->timezone('UTC');
+        $appointmentTimeUTC = $appointment->date_time->timezone('UTC');
 
         $reminderTimeUTC = $appointmentTimeUTC->subMinutes($client->reminder_offset_minutes);
 
         if ($reminderTimeUTC->isFuture()) {
-           ReminderDispatch::dispatch($client, $appointment)->delay(
+            ReminderDispatch::dispatch($client, $appointment)->delay(
                 $reminderTimeUTC
             );
         }
@@ -34,7 +34,25 @@ class AppointmentObserver
      */
     public function updated(Appointment $appointment): void
     {
-        //
+        if ($appointment->isDirty('date_time')) {
+            /** @var Client $client */
+            $client = $appointment->client;
+            $appointmentTimeUTC = $appointment->date_time->timezone('UTC');
+
+            $reminderTimeUTC = $appointmentTimeUTC->subMinutes($client->reminder_offset_minutes);
+
+            if ($reminderTimeUTC->isFuture()) {
+                ReminderDispatch::dispatch($client, $appointment)->delay(
+                    $reminderTimeUTC
+                );
+            }
+        }
+
+        if ($appointment->isDirty('status') && $appointment->status === 'canceled') {
+            /** @var Client $client */
+            $client = $appointment->client;
+            $client->notify(new AppointmentNotification($appointment));
+        }
     }
 
     /**

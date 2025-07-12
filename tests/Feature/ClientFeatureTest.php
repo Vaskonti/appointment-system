@@ -4,7 +4,7 @@ use App\Models\Client;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
-beforeEach( function () {
+beforeEach(function () {
     $user = User::factory()->create();
     $this->actingAs($user, 'api');
 });

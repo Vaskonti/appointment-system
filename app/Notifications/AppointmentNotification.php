@@ -15,7 +15,9 @@ class AppointmentNotification extends Notification
     /**
      * Create a new notification instance.
      */
-    public function __construct(private readonly Appointment $appointment) {}
+    public function __construct(private readonly Appointment $appointment)
+    {
+    }
 
     /**
      * Get the notification's delivery channels.
@@ -32,16 +34,18 @@ class AppointmentNotification extends Notification
      */
     public function toMail(object $notifiable): MailMessage
     {
-        return (new MailMessage)
+        return (new MailMessage())
             ->subject('Upcoming Appointment Reminder')
             ->line('You have an upcoming appointment: ' . $this->appointment->title)
+            ->line('Client: ' . $this->appointment->client->name)
             ->line('Date and Time: ' . $this->appointment->date_time)
+            ->line('Appointment Length: ' . $this->appointment->length_minutes . ' minutes')
             ->line('Please make sure to attend.');
     }
 
     public function toVonage(object $notifiable): VonageMessage
     {
-        return (new VonageMessage)
+        return (new VonageMessage())
             ->content('You have an upcoming appointment: ' . $this->appointment->title . ' on ' . $this->appointment->date_time->format('Y-m-d H:i'))
             ->unicode();
     }

@@ -12,7 +12,9 @@ use Illuminate\Support\Facades\Auth;
 
 class ClientController extends Controller
 {
-    public function __construct(private readonly ClientRepositoryInterface $clientRepository) {}
+    public function __construct(private readonly ClientRepositoryInterface $clientRepository)
+    {
+    }
 
     /**
      * Display a listing of the resource.

@@ -80,11 +80,11 @@ it('can retrieve an appointment by ID', function () {
 });
 
 it('can update an appointment', function () {
-    $appointment = Appointment::factory()->create(['client_id' => $this->client->id, 'status' => AppointmentStatus::SCHEDULED]);
+    $appointment = Appointment::factory()->create(['client_id' => $this->client->id, 'status' => AppointmentStatus::SCHEDULED->value]);
     $response = $this->putJson("/api/appointments/{$appointment->id}", [
         'title' => 'Updated Appointment',
         'date_time' => '2025-10-01 11:00:00',
-        'status' => AppointmentStatus::COMPLETED,
+        'status' => AppointmentStatus::COMPLETED->value,
     ]);
 
     $response->assertStatus(200)
@@ -107,7 +107,7 @@ it('can delete an appointment', function () {
 });
 
 it('can list all appointments for the authenticated user', function () {
-    Appointment::factory()->count(3)->create(['client_id' => $this->client->id, 'status' => AppointmentStatus::SCHEDULED]);
+    Appointment::factory()->count(3)->create(['client_id' => $this->client->id, 'status' => AppointmentStatus::SCHEDULED->value]);
 
     $response = $this->getJson('/api/appointments');
 
@@ -137,7 +137,7 @@ it('can get past appointments', function () {
     Appointment::factory()->create([
         'client_id' => $this->client->id,
         'date_time' => now()->subDays(10),
-        'status' => AppointmentStatus::COMPLETED,
+        'status' => AppointmentStatus::COMPLETED->value,
     ]);
 
     $response = $this->getJson('/api/past-appointments/' . $this->client->id);
@@ -157,7 +157,7 @@ it('can get upcoming appointments', function () {
     Appointment::factory()->create([
         'client_id' => $this->client->id,
         'date_time' => now()->addDays(10),
-        'status' => AppointmentStatus::SCHEDULED,
+        'status' => AppointmentStatus::SCHEDULED->value,
     ]);
 
     $response = $this->getJson('/api/upcoming-appointments/' . $this->client->id);

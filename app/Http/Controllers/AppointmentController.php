@@ -4,11 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateAppointmentRequest;
 use App\Http\Requests\UpdateAppointmentRequest;
+use App\Http\Requests\UpdateStatusRequest;
 use App\Models\Appointment;
 use App\Models\Client;
 use App\Notifications\AppointmentNotification;
 use App\Repositories\Client\ClientRepositoryInterface;
 use App\Services\Appointment\AppointmentServiceInterface;
+use App\Services\ReminderOffsetsService;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -20,9 +22,9 @@ class AppointmentController extends Controller
 {
     public function __construct(
         private readonly AppointmentServiceInterface $appointmentService,
-        private readonly ClientRepositoryInterface   $clientRepository
-    )
-    {
+        private readonly ClientRepositoryInterface   $clientRepository,
+        private readonly ReminderOffsetsService $recurringRemindersService
+    ) {
     }
 
     public function index(): JsonResponse
@@ -42,11 +44,24 @@ class AppointmentController extends Controller
             ], 404);
         }
 
-        $appointment = $this->appointmentService->create($data);
+
+        $appointment = $this->appointmentService->create([
+            'title' => $data['title'] ?? 'No Title',
+            'client_id' => $data['client_id'],
+            'date_time' => $data['date_time'],
+            'status' => $data['status'] ?? 'scheduled',
+            'length_minutes' => $data['length_minutes'] ?? 30,
+        ]);
+
+        $this->recurringRemindersService->create(
+            $appointment->id,
+            $data['reminder_offsets'] ?? [],
+        );
 
         return response()->json([
             'message' => 'Appointment created successfully',
             'appointment' => $appointment,
+            'reminder_offsets' => $this->recurringRemindersService->getRemindersByAppointmentId($appointment->id),
         ], 201);
     }
 
@@ -131,6 +146,29 @@ class AppointmentController extends Controller
 
         return response()->json([
             'appointments' => $appointments,
+        ]);
+    }
+
+    public function updateStatus(UpdateStatusRequest $request, Appointment $appointment): JsonResponse
+    {
+        $data = $request->validated();
+        $user = Auth::user();
+        $client = $this->clientRepository->getClientById($appointment->client_id);
+
+        if (!$client || $client['user_id'] !== $user->id) {
+            return response()->json([
+                'message' => 'Appointment not found or does not belong to the user',
+            ], 404);
+        }
+
+        $updatedAppointment = $this->appointmentService->updateStatus(
+            $appointment->id,
+            Arr::get($data, 'status')
+        );
+
+        return response()->json([
+            'message' => 'Appointment status updated successfully',
+            'appointment' => $updatedAppointment,
         ]);
     }
 }

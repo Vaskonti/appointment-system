@@ -2,11 +2,12 @@
 
 namespace App\Http\Requests;
 
+use App\Constants\AppointmentStatus;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rules\Password;
+use Illuminate\Validation\Rule;
 
-class RegisterRequest extends FormRequest
+class UpdateStatusRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,9 +25,7 @@ class RegisterRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
-            'password' => ['required', Password::defaults(), 'confirmed'],
-            'name' => ['required', 'string', 'max:255'],
+            'status' => ['required', 'string', Rule::in(AppointmentStatus::all())],
         ];
     }
 }

@@ -20,6 +20,7 @@ Route::middleware(['auth:api', AcceptsJsonMiddleware::class])->group(function ()
         Route::get('/{appointment}', [AppointmentController::class, 'show']);
         Route::put('/{appointment}', [AppointmentController::class, 'update']);
         Route::delete('/{appointment}', [AppointmentController::class, 'destroy']);
+        Route::put('{appointment}/status', [AppointmentController::class, 'updateStatus']);
     });
     // Client routes
     Route::prefix('clients')->group(function () {

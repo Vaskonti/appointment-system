@@ -19,7 +19,8 @@ class ReminderDispatch implements ShouldQueue
     public function __construct(
         private readonly Client $client,
         private readonly Appointment $appointment
-    ) {}
+    ) {
+    }
 
     /**
      * Execute the job.

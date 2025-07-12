@@ -2,10 +2,20 @@
 
 namespace App\Constants;
 
-class AppointmentStatus extends BaseConstant
+enum AppointmentStatus: string
 {
-    public const SCHEDULED = 'scheduled';
-    public const COMPLETED = 'completed';
-    public const CANCELLED = 'cancelled';
-    public const MISSED = 'missed';
+    case SCHEDULED = 'scheduled';
+    case COMPLETED = 'completed';
+    case CANCELLED = 'cancelled';
+    case MISSED = 'missed';
+
+    public static function all(): array
+    {
+        return [
+            self::SCHEDULED->value,
+            self::COMPLETED->value,
+            self::CANCELLED->value,
+            self::MISSED->value,
+        ];
+    }
 }

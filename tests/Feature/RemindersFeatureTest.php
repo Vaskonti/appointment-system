@@ -5,7 +5,7 @@ use App\Models\Client;
 use Illuminate\Support\Facades\Queue;
 
 beforeEach(function () {
-   $this->user = \App\Models\User::factory()->create();
+    $this->user = \App\Models\User::factory()->create();
 });
 it('can dispatch a job in the queue', closure: function () {
     Queue::fake();

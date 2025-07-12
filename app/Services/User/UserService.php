@@ -6,7 +6,6 @@ use App\Models\User;
 use App\Repositories\User\UserRepositoryInterface;
 use Illuminate\Support\Facades\Hash;
 
-
 class UserService implements UserServiceInterface
 {
     public function __construct(private readonly UserRepositoryInterface $userRepository)

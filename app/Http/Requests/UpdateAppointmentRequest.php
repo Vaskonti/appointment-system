@@ -27,7 +27,7 @@ class UpdateAppointmentRequest extends FormRequest
         return [
             'title' => ['sometimes', 'string', 'max:255'],
             'date_time' => ['sometimes', 'date_format:Y-m-d H:i:s'],
-            'status' => ['sometimes', Rule::in(AppointmentStatus::asArray())],
+            'status' => ['sometimes', Rule::in(AppointmentStatus::all())],
             'reminder_offset_minutes' => ['sometimes', 'integer', 'min:0'],
         ];
     }

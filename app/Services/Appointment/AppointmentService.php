@@ -11,7 +11,6 @@ class AppointmentService implements AppointmentServiceInterface
     public function __construct(private readonly AppointmentRepositoryInterface $appointmentRepository)
     {
     }
-
     public function create(array $data): Appointment
     {
         return $this->appointmentRepository->create($data);
@@ -50,5 +49,10 @@ class AppointmentService implements AppointmentServiceInterface
     public function getUpcomingAppointmentsByUserId(int $userId, int $clientId): array
     {
         return $this->appointmentRepository->getUpcomingAppointmentsByUserId($userId, $clientId);
+    }
+
+    public function updateStatus(int $id, string $status): Appointment
+    {
+        return $this->appointmentRepository->updateStatus($id, $status);
     }
 }

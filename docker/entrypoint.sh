@@ -13,7 +13,7 @@ chmod -R 777 /var/www/storage
 chown www-data:www-data /var/www/storage/oauth-*.key
 chmod 660 /var/www/storage/oauth-private.key
 
-php artisan config:cleare
+php artisan config:clear
 php artisan migrate --force --seed
 php artisan migrate --force --env=testing
 php artisan passport:keys --force

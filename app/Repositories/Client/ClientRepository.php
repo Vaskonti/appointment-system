@@ -55,7 +55,7 @@ class ClientRepository implements ClientRepositoryInterface
 
     public function getClientByPhone(string $phone): ?array
     {
-       return Client::where('phone', $phone)->first()?->toArray() ?? null;
+        return Client::where('phone', $phone)->first()?->toArray() ?? null;
     }
 
     public function getClientByName(string $name): ?array
